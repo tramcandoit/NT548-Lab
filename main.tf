@@ -41,7 +41,12 @@ module "s3_terraform_tfvar" {
     Environment = var.environment
   }
 }
-
+module "tfvars_upload" {
+  source = "./modules/s3-object"
+  key= "dev.tfvars"
+  bucket = module.s3_terraform_tfvar.s3_bucket_id
+  file_source = "dev.tfvars"
+}
 
 # VPC Module
 module "vpc" {

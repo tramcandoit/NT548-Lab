@@ -23,15 +23,17 @@ jobs:
               id: awscreds
               uses: aws-actions/configure-aws-credentials@v2
               with:
-                  role-to-assume: arn:aws:iam::971787806377:role/Terraform-OIDC
-                  aws-region: ap-southeast-2
+                  role-to-assume: arn:aws:iam::971787806377:role/terraform-secret-manager
+                  aws-region: ap-southeast-1
 
             # Step 3: Retrieve AWS credentials from Secrets Manager
             - name: Retrieve AWS credentials from Secrets Manager
               id: aws-secrets
               run: |
-                  export AWS_ACCESS_KEY_ID=$(aws secretsmanager get-secret-value --secret-id AWS_ACCESS_KEY --query SecretString --output text | jq -r '.AWS_ACCESS_KEY_ID')
-                  export AWS_SECRET_ACCESS_KEY=$(aws secretsmanager get-secret-value --secret-id AWS_SECRET_KEY --query SecretString --output text | jq -r '.AWS_SECRET_ACCESS_KEY')
+                  # Retrieve AWS_ACCESS_KEY and AWS_SECRET_KEY from the secret
+                  secret=$(aws secretsmanager get-secret-value --secret-id aws-credentials --query SecretString --output text)
+                  export AWS_ACCESS_KEY_ID=$(echo $secret | jq -r '.AWS_ACCESS_KEY')
+                  export AWS_SECRET_ACCESS_KEY=$(echo $secret | jq -r '.AWS_SECRET_KEY')
                   echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> $GITHUB_ENV
                   echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> $GITHUB_ENV
 
@@ -41,15 +43,10 @@ jobs:
               with:
                   terraform_version: 1.5.0
 
-            # Step 5: Upload .tfvars to S3
-            - name: Upload .tfvars to S3
-              run: |
-                  aws s3 cp ./def.tfvars s3://terraform-tfvar-s3-bucket-lab1/def.tfvars
-
             # Step 6: Pull .tfvars from S3
             - name: Pull .tfvars from S3
               run: |
-                  aws s3 cp s3://terraform-tfvar-s3-bucket-lab1/def.tfvars ./def.tfvars
+                  aws s3 cp s3://terraform-tfvars-s3-bucket-lab1/dev.tfvars ./dev.tfvars
 
             # Step 7: Pull .tfstate from S3
             - name: Pull .tfstate from S3
