@@ -20,11 +20,11 @@ jobs:
             # Step 2: Set AWS credentials from repo secrets
             - name: Set AWS Credentials
               env:
-                  AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
-                  AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
               run: |
-                  aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }}
-                  aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }}
+                  aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   aws configure set region ap-southeast-1
 
             # Step 3: Set up Terraform
@@ -35,9 +35,6 @@ jobs:
 
             # Step 4: Pull .tfvars from S3
             - name: Pull .tfvars from S3
-              env:
-                  AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
-                  AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
               run: |
                   aws s3 cp s3://terraform-tfvars-s3-bucket-lab1/dev.tfvars ./dev.tfvars --region ap-southeast-1
 
