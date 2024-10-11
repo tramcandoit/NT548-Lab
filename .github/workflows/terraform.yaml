@@ -6,7 +6,6 @@ on:
             - master
 
 permissions:
-    id-token: write # Required for OIDC token
     contents: read
 
 jobs:
@@ -18,56 +17,52 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v3
 
-            # Step 2: Assume the IAM Role via OIDC
-            - name: Assume role using OIDC
-              id: awscreds
-              uses: aws-actions/configure-aws-credentials@v2
-              with:
-                  role-to-assume: arn:aws:iam::971787806377:role/terraform-secret-manager
-                  aws-region: ap-southeast-1
-
-            # Step 3: Retrieve AWS credentials from Secrets Manager
-            - name: Retrieve AWS credentials from Secrets Manager
-              id: aws-secrets
+            # Step 2: Set AWS credentials from repo secrets
+            - name: Set AWS Credentials
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
               run: |
-                  # Retrieve AWS_ACCESS_KEY and AWS_SECRET_KEY from the secret
-                  secret=$(aws secretsmanager get-secret-value --secret-id aws-credentials --query SecretString --output text)
-                  export AWS_ACCESS_KEY_ID=$(echo $secret | jq -r '.AWS_ACCESS_KEY')
-                  export AWS_SECRET_ACCESS_KEY=$(echo $secret | jq -r '.AWS_SECRET_KEY')
-                  echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> $GITHUB_ENV
-                  echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> $GITHUB_ENV
+                  echo "AWS_ACCESS_KEY_ID is set."
+                  echo "AWS_SECRET_ACCESS_KEY is set."
 
-            # Step 4: Set up Terraform
+            # Step 3: Set up Terraform
             - name: Set up Terraform
               uses: hashicorp/setup-terraform@v2
               with:
                   terraform_version: 1.5.0
 
-            # Step 6: Pull .tfvars from S3
+            # Step 4: Pull .tfvars from S3
             - name: Pull .tfvars from S3
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
               run: |
-                  aws s3 cp s3://terraform-tfvars-s3-bucket-lab1/dev.tfvars ./dev.tfvars
+                  aws s3 cp s3://terraform-tfvars-s3-bucket-lab1/def.tfvars ./def.tfvars
 
-            # Step 7: Pull .tfstate from S3
+            # Step 5: Pull .tfstate from S3
             - name: Pull .tfstate from S3
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
               run: |
                   aws s3 cp s3://terraform-tfstate-s3-bucket-lab1/terraform.tfstate ./terraform.tfstate
 
-            # Step 8: Check Terraform using Checkov
+            # Step 6: Check Terraform using Checkov
             - name: Check Terraform with Checkov
               run: |
                   pip install checkov
                   checkov -d .
 
-            # Step 9: Terraform Init
+            # Step 7: Terraform Init
             - name: Terraform Init
               run: terraform init
 
-            # Step 10: Terraform Plan
+            # Step 8: Terraform Plan
             - name: Terraform Plan
               run: terraform plan -var-file="def.tfvars"
 
-            # Step 11: Terraform Apply
+            # Step 9: Terraform Apply
             - name: Terraform Apply
               if: github.event_name == 'push'
               run: terraform apply -var-file="def.tfvars" -auto-approve
