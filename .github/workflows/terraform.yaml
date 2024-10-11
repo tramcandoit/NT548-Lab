@@ -1,0 +1,76 @@
+name: Terraform CI
+
+on:
+    push:
+        branches:
+            - master
+
+permissions:
+    id-token: write # Required for OIDC token
+    contents: read
+
+jobs:
+    terraform:
+        runs-on: ubuntu-latest
+
+        steps:
+            # Step 1: Checkout the code
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            # Step 2: Assume the IAM Role via OIDC
+            - name: Assume role using OIDC
+              id: awscreds
+              uses: aws-actions/configure-aws-credentials@v2
+              with:
+                  role-to-assume: arn:aws:iam::971787806377:role/Terraform-OIDC
+                  aws-region: ap-southeast-2
+
+            # Step 3: Retrieve AWS credentials from Secrets Manager
+            - name: Retrieve AWS credentials from Secrets Manager
+              id: aws-secrets
+              run: |
+                  export AWS_ACCESS_KEY_ID=$(aws secretsmanager get-secret-value --secret-id AWS_ACCESS_KEY --query SecretString --output text | jq -r '.AWS_ACCESS_KEY_ID')
+                  export AWS_SECRET_ACCESS_KEY=$(aws secretsmanager get-secret-value --secret-id AWS_SECRET_KEY --query SecretString --output text | jq -r '.AWS_SECRET_ACCESS_KEY')
+                  echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> $GITHUB_ENV
+                  echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> $GITHUB_ENV
+
+            # Step 4: Set up Terraform
+            - name: Set up Terraform
+              uses: hashicorp/setup-terraform@v2
+              with:
+                  terraform_version: 1.5.0
+
+            # Step 5: Upload .tfvars to S3
+            - name: Upload .tfvars to S3
+              run: |
+                  aws s3 cp ./def.tfvars s3://terraform-tfvar-s3-bucket-lab1/def.tfvars
+
+            # Step 6: Pull .tfvars from S3
+            - name: Pull .tfvars from S3
+              run: |
+                  aws s3 cp s3://terraform-tfvar-s3-bucket-lab1/def.tfvars ./def.tfvars
+
+            # Step 7: Pull .tfstate from S3
+            - name: Pull .tfstate from S3
+              run: |
+                  aws s3 cp s3://terraform-tfstate-s3-bucket-lab1/terraform.tfstate ./terraform.tfstate
+
+            # Step 8: Check Terraform using Checkov
+            - name: Check Terraform with Checkov
+              run: |
+                  pip install checkov
+                  checkov -d .
+
+            # Step 9: Terraform Init
+            - name: Terraform Init
+              run: terraform init
+
+            # Step 10: Terraform Plan
+            - name: Terraform Plan
+              run: terraform plan -var-file="def.tfvars"
+
+            # Step 11: Terraform Apply
+            - name: Terraform Apply
+              if: github.event_name == 'push'
+              run: terraform apply -var-file="def.tfvars" -auto-approve
