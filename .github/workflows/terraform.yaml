@@ -42,7 +42,7 @@ jobs:
 
             # Step 5: Terraform Init
             - name: Terraform Init
-              run: terraform init
+              run: terraform init -force-copy
 
             # Step 6: Terraform Plan
             - name: Terraform Plan
