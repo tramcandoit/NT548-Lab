@@ -20,8 +20,8 @@ jobs:
             # Step 2: Set AWS credentials from repo secrets
             - name: Set AWS Credentials
               env:
-                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
               run: |
                   # Verify the credentials are set correctly
                   echo "AWS_ACCESS_KEY_ID is set."
