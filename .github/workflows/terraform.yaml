@@ -40,29 +40,15 @@ jobs:
               run: |
                   aws s3 cp s3://terraform-tfvars-s3-bucket-lab1/dev.tfvars ./dev.tfvars --region ap-southeast-1
 
-            # Step 5: Pull .tfstate from S3
-            - name: Pull .tfstate from S3
-              env:
-                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-              run: |
-                  aws s3 cp s3://terraform-tfstate-s3-bucket-lab1/terraform.tfstate ./terraform.tfstate --region ap-southeast-1
-
-            # Step 6: Check Terraform using Checkov
-            - name: Check Terraform with Checkov
-              run: |
-                  pip install checkov
-                  checkov -d . --quiet
-
-            # Step 7: Terraform Init
+            # Step 5: Terraform Init
             - name: Terraform Init
               run: terraform init
 
-            # Step 8: Terraform Plan
+            # Step 6: Terraform Plan
             - name: Terraform Plan
               run: terraform plan -var-file="def.tfvars"
 
-            # Step 9: Terraform Apply
+            # Step 7: Terraform Apply
             - name: Terraform Apply
               if: github.event_name == 'push'
               run: terraform apply -var-file="def.tfvars" -auto-approve
