@@ -18,7 +18,7 @@ module "vpc_module" {
 module "nat_gateway_module" {
   source     = "./modules/aws_nat-gateway"
   region     = var.region
-  subnet_ids = module.vpc_module.public_subnet_id
+  subnet_ids = module.vpc_module.public_subnet_id[0]
 }
 
 ### Declare the Route table module
@@ -28,6 +28,6 @@ module "route_table_module" {
   vpc_ids            = module.vpc_module.vpc_id
   igw_ids            = module.vpc_module.igw_id
   nat-gateway_ids    = module.nat_gateway_module.nat_gateway_id
-  public_subnet_ids  = module.vpc_module.public_subnet_id
-  private_subnet_ids = module.vpc_module.private_subnet_id
+  public_subnet_ids  = module.vpc_module.public_subnet_id[0]
+  private_subnet_ids = module.vpc_module.private_subnet_id[0]
 }

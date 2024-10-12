@@ -30,7 +30,7 @@ resource "aws_route_table" "public_rtb" {
 #---------------------------------------------------------------#
 
 resource "aws_route_table" "private_rtb" {
-  vpc_id = var.igw_ids
+  vpc_id = var.vpc_ids
 
   route {
     cidr_block     = "0.0.0.0/0"                
