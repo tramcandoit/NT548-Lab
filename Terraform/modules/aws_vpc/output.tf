@@ -22,11 +22,11 @@ output "igw_id" {
   value       = aws_internet_gateway.igw.id
 }
 
-# Output the Security Group ID
-output "default_security_group_id" {
-  description = "The ID of the default security group"
-  value       = aws_default_security_group.default-sg.id
-}
+# # Output the Security Group ID
+# output "default_security_group_id" {
+#   description = "The ID of the default security group"
+#   value       = aws_default_security_group.default-sg.id
+# }
 
 # Output the VPC CIDR block
 output "vpc_cidr_block" {

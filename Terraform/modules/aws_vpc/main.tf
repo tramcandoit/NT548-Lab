@@ -19,17 +19,17 @@ resource "aws_vpc" "vpc" {
 
 resource "aws_subnet" "public_subnet" {
   vpc_id     = aws_vpc.vpc.id
-  count = length(var.public_subnet_cidr)
+  count      = length(var.public_subnet_cidr)
   cidr_block = element(var.public_subnet_cidr, count.index)
   tags = {
     Name = "${local.project_name}-public-subnet"
   }
-  depends_on = [ aws_vpc.vpc ]
+  depends_on = [aws_vpc.vpc]
 }
 
 resource "aws_subnet" "private_subnet" {
   vpc_id     = aws_vpc.vpc.id
-  count = length(var.private_subnet_cidr)
+  count      = length(var.private_subnet_cidr)
   cidr_block = element(var.private_subnet_cidr, count.index + 1)
 
   tags = {
@@ -48,11 +48,6 @@ resource "aws_internet_gateway" "igw" {
   tags = {
     Name = "${local.project_name}-igw"
   }
-}
-
-resource "aws_internet_gateway_attachment" "igw-attachment" {
-  internet_gateway_id = aws_internet_gateway.igw.id
-  vpc_id              = aws_vpc.vpc.id
 }
 
 #---------------------------------------------------------------#
@@ -74,5 +69,9 @@ resource "aws_default_security_group" "default-sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${local.project_name}-default-sg"
   }
 }

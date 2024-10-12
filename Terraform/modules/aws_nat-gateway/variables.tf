@@ -1,5 +1,10 @@
 variable "region" {
   type        = string
-  default     = "us-east-1"
+  default     = "ap-southeast-1"
   description = "Region of VPC"
+}
+
+variable "subnet_ids" {
+  type        = string
+  description = "ID of subnet that NAT Gateway will be created in"
 }

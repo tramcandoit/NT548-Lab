@@ -12,15 +12,15 @@ locals {
 #---------------------------------------------------------------#
 
 resource "aws_route_table" "public_rtb" {
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = var.vpc_ids
 
   route {
     cidr_block = "0.0.0.0/0" # Destination cidr block
-    gateway_id = aws_internet_gateway.igw.id
+    gateway_id = var.igw_ids
   }
 
   tags = {
-    Name = "${project_name}-public_rtb"
+    Name = "${local.project_name}-public_rtb"
   }
 }
 
@@ -30,15 +30,15 @@ resource "aws_route_table" "public_rtb" {
 #---------------------------------------------------------------#
 
 resource "aws_route_table" "private_rtb" {
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = var.igw_ids
 
   route {
     cidr_block     = "0.0.0.0/0"                
-    nat_gateway_id = aws_nat_gateway.natgw.id  
+    nat_gateway_id = var.nat-gateway_ids  
   }
 
   tags = {
-    Name = "${project_name}-private_rtb"
+    Name = "${local.project_name}-private_rtb"
   }
 }
 
@@ -48,7 +48,7 @@ resource "aws_route_table" "private_rtb" {
 #---------------------------------------------------------------#
 
 resource "aws_route_table_association" "public_rtb_asso" {
-  subnet_id      = aws_subnet.public_subnet.id
+  subnet_id      = var.public_subnet_ids
   route_table_id = aws_route_table.public_rtb.id
 }
 
@@ -58,6 +58,6 @@ resource "aws_route_table_association" "public_rtb_asso" {
 #---------------------------------------------------------------#
 
 resource "aws_route_table_association" "private_rtb_asso" {
-  subnet_id      = aws_subnet.private_subnet.id
+  subnet_id      = var.private_subnet_ids
   route_table_id = aws_route_table.private_rtb.id
 }

@@ -16,12 +16,12 @@ resource "aws_eip" "nat_eip" {
 
 resource "aws_nat_gateway" "natgw" {
   allocation_id = aws_eip.nat_eip.id
-  subnet_id     = aws_subnet.public_subnet.id
+  subnet_id     = var.subnet_ids
   tags = {
-    Name = "${project_name}-natgw"
+    Name = "${local.project_name}-natgw"
   }
 
   # To ensure proper ordering, it is recommended to add an explicit dependency
   # on the Internet Gateway for the VPC.
-  depends_on = [aws_internet_gateway.igw]
+  # depends_on = [aws_internet_gateway.igw]
 }
