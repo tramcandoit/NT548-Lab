@@ -63,21 +63,6 @@ Resources:
       InternetGatewayId: !Ref InternetGateway
       VpcId: !Ref VPC
 
-  NatGatewayEIP:
-    Type: AWS::EC2::EIP
-    DependsOn: InternetGatewayAttachment
-    Properties:
-      Domain: vpc
-
-  NatGateway:
-    Type: AWS::EC2::NatGateway
-    Properties:
-      AllocationId: !GetAtt NatGatewayEIP.AllocationId
-      SubnetId: !Ref PublicSubnet
-      Tags:
-        - Key: Name
-          Value: NAT Gateway
-
   DefaultSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -101,23 +86,17 @@ Outputs:
     Export:
       Name: PublicSubnetId
 
-  InternetGatewayId:
-    Description: The Internet Gateway ID
-    Value: !Ref InternetGateway
-    Export:
-      Name: InternetGatewayId
-
-  NatGatewayId:
-    Description: The NAT Gateway ID
-    Value: !Ref NatGateway
-    Export:
-      Name: NatGatewayId
-
   PrivateSubnetId:
     Description: The Private Subnet ID
     Value: !Ref PrivateSubnet
     Export:
       Name: PrivateSubnetId
+
+  InternetGatewayId:
+    Description: The Internet Gateway ID
+    Value: !Ref InternetGateway
+    Export:
+      Name: InternetGatewayId
 
   DefaultSecurityGroupId:
     Description: The Default Security Group ID
