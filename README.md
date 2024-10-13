@@ -5,6 +5,7 @@
 1. Nguyễn Quốc An - 22520023
 2. Nguyễn Đức Khang - 22520618
 3. Bùi Thị Ngọc Trăm - 22521497
+4. Trần Dương Minh Đại - 22520183
 
 **Nguyên tắc làm việc trên Github:**
 - Trước khi bắt đầu làm, kiểm tra nhánh master nếu có thay đổi thì pull về local
