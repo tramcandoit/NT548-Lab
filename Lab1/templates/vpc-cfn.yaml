@@ -16,7 +16,7 @@ Parameters:
     Description: IP range for the private subnet
     Type: String
     Default: 192.168.2.0/24
-    
+
 Resources:
   VPC:
     Type: AWS::EC2::VPC
@@ -34,7 +34,9 @@ Resources:
       VpcId: !Ref VPC
       CidrBlock: !Ref PublicSubnetCIDR
       MapPublicIpOnLaunch: true
-      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs ''
       Tags:
         - Key: Name
           Value: Public Subnet
@@ -45,7 +47,9 @@ Resources:
       VpcId: !Ref VPC
       CidrBlock: !Ref PrivateSubnetCIDR
       MapPublicIpOnLaunch: false
-      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs ''
       Tags:
         - Key: Name
           Value: Private Subnet
@@ -56,7 +60,7 @@ Resources:
       Tags:
         - Key: Name
           Value: Internet Gateway
-  
+
   InternetGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
