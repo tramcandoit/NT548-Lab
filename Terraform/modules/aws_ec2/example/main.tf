@@ -7,7 +7,7 @@ locals {
 }
 
 resource "aws_instance" "ec2_instance" {
-  for_each      = { for idx, config in var.instances_configuration : idx => config }
+  for_each = { for idx, config in var.instances_configuration : idx => config }
   #count         = each.value.count
   ami           = each.value.ami
   instance_type = each.value.instance_type

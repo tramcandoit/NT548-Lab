@@ -33,7 +33,7 @@ variable "instances_configuration" {
     tags = {
       Name = "public-instance"
     }
-    vpc_security_group_ids = ["sg-0b16f3768e5545259"] # public ssh sg
+    vpc_security_group_ids = ["sg-0b16f3768e5545259"]   # public ssh sg
     subnet_id              = "subnet-0e090222e96132976" # public subnet
     user_data_file         = "user-data.sh"
     key_name               = "lab1-group13-keypair-1"
@@ -51,11 +51,11 @@ variable "instances_configuration" {
       tags = {
         Name = "private-instance"
       }
-      vpc_security_group_ids = ["sg-03e3186c5ad1726f7"] # private ssh sg
+      vpc_security_group_ids = ["sg-03e3186c5ad1726f7"]   # private ssh sg
       subnet_id              = "subnet-04cf1cd0785d0f1f7" # private subnet
-      user_data_file = null
+      user_data_file         = null
       key_name               = "lab1-group13-keypair-1"
       associate_elastic_ip   = false
-      iam_instance_profile = null
+      iam_instance_profile   = null
   }]
 }
