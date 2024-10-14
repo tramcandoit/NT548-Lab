@@ -9,7 +9,7 @@
 1. **Clone the Repository**
     ```sh
     git clone https://github.com/tramcandoit/NT548-Lab.git
-    cd Lab1_CloudFormation
+    cd CloudFormation
     ```
 
 2. **Upload templates to your S3 bucket**
