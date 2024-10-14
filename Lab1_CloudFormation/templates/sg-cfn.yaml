@@ -5,7 +5,7 @@ Parameters:
   AllowedSSHIP:
     Description: The IP address range that can SSH to the public EC2 instances
     Type: String
-    Default: 0.0.0.0/0
+    Default: 0.0.0.0/0  # Change to your user IP address
 
 Resources:
   PublicEC2SecurityGroup:
