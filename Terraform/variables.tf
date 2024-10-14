@@ -50,39 +50,39 @@ variable "instances_configuration" {
   }))
 
   default = [{
-    count         = 1
-    ami           = "ami-03fa85deedfcac80b" # ubuntu 22.04
-    instance_type = "t2.micro"
+    count         = 1 # number of instances that has the same configuration
+    ami           = "ami-03fa85deedfcac80b" # os image
+    instance_type = "t2.micro" # instance type
     root_block_device = {
-      volume_size = 8
-      volume_type = "gp2"
+      volume_size = 8 # volume size
+      volume_type = "gp2" # volume type 
     }
     tags = {
-      Name = "public-instance"
+      Name = "public-instance" # instance name
     }
-    vpc_security_group_ids = null # public ssh sg
-    subnet_id              = null # public subnet
-    user_data_file         = "user-data.sh"
-    key_name               = "lab1-group13-keypair-1"
-    associate_elastic_ip   = true
-    iam_instance_profile   = "ec2-role-instance-profile"
+    vpc_security_group_ids = null 
+    subnet_id              = null 
+    user_data_file         = "user-data.sh" # user data file name
+    key_name               = "lab1-group13-keypair-1" # ssh key pair name
+    associate_elastic_ip   = true # need assign elastic ip or not
+    iam_instance_profile   = "ec2-role-instance-profile" # name of iam instance profile
     },
     {
-      count         = 1
-      ami           = "ami-03fa85deedfcac80b" # ubuntu 22.04
-      instance_type = "t2.micro"
+      count         = 1 # number of instances that has the same configuration
+      ami           = "ami-03fa85deedfcac80b" # os image
+      instance_type = "t2.micro" # instance type
       root_block_device = {
-        volume_size = 8
-        volume_type = "gp2"
+        volume_size = 8 # volume size
+        volume_type = "gp2" # volume type
       }
       tags = {
-        Name = "private-instance"
+        Name = "private-instance" # instance name
       }
-      vpc_security_group_ids = null # private ssh sg
-      subnet_id              = null # private subnet
-      user_data_file         = null
-      key_name               = "lab1-group13-keypair-1"
-      associate_elastic_ip   = false
-      iam_instance_profile   = null
+      vpc_security_group_ids = null 
+      subnet_id              = null
+      user_data_file         = null # user data file name - null = no user data
+      key_name               = "lab1-group13-keypair-1" # ssh key pair name
+      associate_elastic_ip   = false # need assign elastic ip or not
+      iam_instance_profile   = null # name of iam instance profile - null = no iam instance profile
   }]
 }
