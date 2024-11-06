@@ -13,5 +13,5 @@ variable "role_name" {
 variable "secret_arns" {
   type        = list(string)
   description = "List of ARNs for the secrets that this role can access."
-  default     = ["arn:aws:secretsmanager:ap-southeast-1:625715126488:secret:lab1-group13-keypair-1-RfeHh3"]
+  default     = ["arn:aws:secretsmanager:ap-southeast-1:381492301125:secret:ssh_key-SOIegK"] 
 }

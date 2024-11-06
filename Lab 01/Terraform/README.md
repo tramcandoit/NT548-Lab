@@ -6,8 +6,8 @@
 - Configure the AWS credentials on your machine using AWS CLI. If you haven't installed AWS CLI before, [check this link](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
 2. **Create a SSH key pair**
-- You can create the key pair on AWS console, or using AWS CLI, as long as you download or store the private key (.pem)
-- If you've already created, you still can use it without create a new one
+- Create a key pairs at EC2 console, remember the name of the key pairs you've just created
+- Download the private key (.pem file)
 
 3. **Store the private key at AWS Secrets Manager**
 - Create a secret that contains the private key of the key pair
@@ -46,6 +46,8 @@ cd ..
 cd ..
 ```
 - Modify the **default** section at **variables.tf** file *(read description at variables.tf file for details)* as your demand
+
+- You must also change to the name of you key pairs and secret too
 
 - **DO NOT** modify the **vpc_security_group_ids** and **subnet_id** value (null)
 

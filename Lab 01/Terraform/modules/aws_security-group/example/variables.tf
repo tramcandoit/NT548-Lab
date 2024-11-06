@@ -7,7 +7,7 @@ variable "region" {
 variable "vpc_id" {
   type        = string
   description = "VPC ID"
-  default     = "vpc-090e793b42ad6f18e"
+  default     = "vpc-0eb364f47c3e9aaaa"
 }
 
 ### Must specify the exact ip address that has permission to access the EC2 instance in public subnet
