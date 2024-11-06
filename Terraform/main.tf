@@ -4,6 +4,15 @@
 #   secret_key = aws_secret_access_key
 # }
 
+terraform {
+  backend "s3" {
+    bucket         = "nt548-terraform"
+    key            = "terraform.tfstate"
+    region         = "ap-southeast-1"
+    dynamodb_table = "terraform_table"
+  }
+}
+
 ### Declare the VPC module
 module "vpc_module" {
   source              = "./modules/aws_vpc"
