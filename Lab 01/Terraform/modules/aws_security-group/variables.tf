@@ -1,6 +1,6 @@
 variable "region" {
   type        = string
-  default     = "ap-southeast-1"
+  default     = "ap-northeast-1"
   description = "Region of Security Group"
 }
 
@@ -14,5 +14,5 @@ variable "vpc_id" {
 variable "cidr_block" {
   description = "Public IP from Internet that has permission to access the EC2 instance in public subnet"
   type        = string
-  default     = "18.139.24.244/32"
+  default     = "0.0.0.0/0"
 }

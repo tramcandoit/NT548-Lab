@@ -3,8 +3,9 @@ provider "aws" {
 }
 
 locals {
-  project_name = "lab1-group13"
+  project_name = "lab2-group13"
 }
+
 
 resource "aws_security_group" "public_ssh-sg" {
   vpc_id      = var.vpc_id
@@ -14,6 +15,7 @@ resource "aws_security_group" "public_ssh-sg" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = [var.cidr_block]
+    description = "Allow SSH from a specific IP address"
   }
 
   egress {
@@ -21,6 +23,7 @@ resource "aws_security_group" "public_ssh-sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all traffic to the internet"
   }
   tags = {
     Name = "${local.project_name}-public-ssh-sg"
@@ -35,6 +38,7 @@ resource "aws_security_group" "private_ssh-sg" {
     to_port         = 22
     protocol        = "tcp"
     security_groups = [aws_security_group.public_ssh-sg.id]
+    description     = "Allow SSH from bastion host"
   }
 
   egress {
@@ -42,6 +46,7 @@ resource "aws_security_group" "private_ssh-sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all traffic to the internet"
   }
   tags = {
     Name = "${local.project_name}-private-ssh-sg"

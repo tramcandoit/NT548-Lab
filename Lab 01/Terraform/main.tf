@@ -6,9 +6,9 @@
 
 terraform {
   backend "s3" {
-    bucket         = "nt548-terraform"
+    bucket         = "nt548-terraform-lab2"
     key            = "terraform.tfstate"
-    region         = "ap-southeast-1"
+    region         = "ap-northeast-1"
     dynamodb_table = "terraform_table"
   }
 }

@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 locals {
-  project_name = "lab1-group13"
+  project_name = "lab2-group13"
 }
 
 #---------------------------------------------------------------#

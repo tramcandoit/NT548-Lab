@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 locals {
-  project_name = "lab1-group13"
+  project_name = "lab2-group13"
 }
 
 #---------------------------------------------------------------#
@@ -15,7 +15,23 @@ resource "aws_vpc" "vpc" {
   tags = {
     Name = "${local.project_name}-vpc"
   }
+  
 }
+resource "aws_flow_log" "vpc_flow_log" {
+  vpc_id = aws_vpc.vpc.id
+
+  log_destination_type = "cloud-watch-logs" # or "s3" if you prefer S3
+  log_group_name       = "/aws/vpc/flow-logs/${local.project_name}-vpc"
+  traffic_type         = "ALL" # Choose from "ALL", "ACCEPT", or "REJECT"
+
+  tags = {
+    Name = "${local.project_name}-vpc-flow-log"
+  }
+
+  # Ensure this IAM role exists if using CloudWatch Logs
+  iam_role_arn = aws_iam_role.vpc_flow_log_role.arn
+}
+
 
 resource "aws_subnet" "public_subnet" {
   vpc_id     = aws_vpc.vpc.id

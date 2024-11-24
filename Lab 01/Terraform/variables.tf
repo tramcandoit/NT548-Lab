@@ -1,7 +1,7 @@
 ### Variables for VPC module
 variable "region" {
   type        = string
-  default     = "ap-southeast-1"
+  default     = "ap-northeast-1"
   description = "Region of VPC"
 }
 
@@ -51,7 +51,7 @@ variable "instances_configuration" {
 
   default = [{
     count         = 1 # number of instances that has the same configuration
-    ami           = "ami-03fa85deedfcac80b" # os image
+    ami           = "ami-023ff3d4ab11b2525" # os image
     instance_type = "t2.micro" # instance type
     root_block_device = {
       volume_size = 8 # volume size
@@ -63,13 +63,13 @@ variable "instances_configuration" {
     vpc_security_group_ids = null 
     subnet_id              = null 
     user_data_file         = "user-data.sh" # user data file name
-    key_name               = "ssh_keypair" # ssh key pair name
+    key_name               = "lab2-key" # ssh key pair name
     associate_elastic_ip   = true # need assign elastic ip or not
     iam_instance_profile   = "ec2-role-instance-profile" # name of iam instance profile
     },
     {
       count         = 1 # number of instances that has the same configuration
-      ami           = "ami-03fa85deedfcac80b" # os image
+      ami           = "ami-023ff3d4ab11b2525" # os image
       instance_type = "t2.micro" # instance type
       root_block_device = {
         volume_size = 8 # volume size
@@ -81,7 +81,7 @@ variable "instances_configuration" {
       vpc_security_group_ids = null 
       subnet_id              = null
       user_data_file         = null # user data file name - null = no user data
-      key_name               = "ssh_keypair" # ssh key pair name
+      key_name               = "lab2-key" # ssh key pair name
       associate_elastic_ip   = false # need assign elastic ip or not
       iam_instance_profile   = null # name of iam instance profile - null = no iam instance profile
   }]

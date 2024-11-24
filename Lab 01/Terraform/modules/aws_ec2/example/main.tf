@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 locals {
-  project_name = "lab1-group13"
+  project_name = "lab2-group13"
 }
 
 resource "aws_instance" "ec2_instance" {
@@ -16,6 +16,11 @@ resource "aws_instance" "ec2_instance" {
     volume_type           = each.value.root_block_device.volume_type
     delete_on_termination = true
   }
+  metadata_options {
+    http_tokens = "required"  # Enforces IMDSv2
+    http_put_response_hop_limit = 1
+    http_endpoint = "enabled"
+  }
   tags = merge(
     each.value.tags,
     {
@@ -26,7 +31,10 @@ resource "aws_instance" "ec2_instance" {
   user_data                   = each.value.user_data_file != null ? file(each.value.user_data_file) : ""
   associate_public_ip_address = false
   key_name                    = each.value.key_name
-  iam_instance_profile        = each.value.iam_instance_profile
+  iam_instance_profile        = each.value.
+  monitoring                  = true
+  ebs_optimized               = true
+  
 }
 
 # Resource to create Elastic IPs only for instances with associate_elastic_ip = true
