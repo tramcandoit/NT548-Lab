@@ -3,7 +3,7 @@ name: Terraform CI
 on:
     push:
         branches:
-            - master
+            - DaiLab2
 
 permissions:
     contents: read
